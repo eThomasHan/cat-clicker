@@ -1,11 +1,9 @@
-<!-- Learn about this code on MDN: https://developer.mozilla.org/en-US/docs/Learn/JavaScript/First_steps/A_first_splash -->
-
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
 
-    <title>Number guessing game</title>
+    <title>Cat Clicker</title>
 
     <style>
       html {
@@ -19,42 +17,93 @@
         margin: 0 auto;
       }
 
+      a {
+          color: blue;
+      }
+
+      a:hover {
+          text-decoration: underline;
+          cursor: pointer;
+      }
+
       .lastResult {
         color: white;
         padding: 3px;
       }
+
+      .sidebar {
+          list-style: none;
+          width: 350px;
+          float: left;
+      }
+
+      .content {
+          margin-left: 350px;
+      }
     </style>
-  </head>
+</head>
 
-  <body>
-      <h1>Click count: <span class="clickcount"></span></h1>
-
-      
-
-<div class="image">
-  <img src="cat.jpg" class="catImage">
-</div>
-
+<body>
+    <div class="container">
+        <ul class="sidebar">
+        </ul>
+        <div class="content">
+            <h3><span id="cat-name"></span>: <span id="clickcount"></span></h3>
+            <div class="image">
+                <img src="" id="cat-image" style="width: 450px; height: 350px">
+            </div>
+        </div>
+    </div>
 </body>
 
 <script>
 
-  // Your JavaScript goes here
-  var catImage = document.querySelector('.catImage');
-  var clickcountElement = document.querySelector('.clickcount');
-  var clickCount = 0;
+    var cats = [
+        { name: "porky", src: "porky.jpg", clickcount: 0 },
+        { name: "chewie", src: "chewie.jpg", clickcount: 0 },
+        { name: "jetske", src: "jetske.jpg", clickcount: 0 },
+        { name: "flower", src: "flower.jpg", clickcount: 0 },
+        { name: "laptop", src: "laptop.jpg", clickcount: 0 }
+    ];
 
-  updateCountOnView();
-  
-  function incrementCount() {
-    clickCount++;
-    updateCountOnView(clickCount);
-  }
+    var activeIndex = 0;
+    var sidebar = document.querySelector('.sidebar');
+    var catImage = document.querySelector('#cat-image');
+    var clickcountElement = document.querySelector('#clickcount');
+    var catnameElement = document.querySelector('#cat-name');
 
-  function updateCountOnView() {
-    clickcountElement.textContent = clickCount;
-  }
+    for (var i = 0; i < cats.length; i++) {
+        var elem = document.createElement('li');
+        var link = document.createElement('a');
+        link.addEventListener('click', (function (indexcopy) {
+            return function () {
+                updateContent(indexcopy);
+            };
+        })(i));
+        link.textContent = cats[i].name;
+        elem.appendChild(link);
+        sidebar.appendChild(elem);
+    }
 
-  catImage.addEventListener('click', incrementCount);
+    updateContent(activeIndex);
+
+    function updateContent(index) {
+        activeIndex = index;
+        catnameElement.textContent = cats[activeIndex].name;
+        catImage.setAttribute('src', cats[activeIndex].src)
+        updateCountOnView()
+    }
+
+    function incrementClickCount() {
+        cats[activeIndex].clickcount++;
+        updateCountOnView();
+    }
+
+    function updateCountOnView() {
+        clickcountElement.textContent = cats[activeIndex].clickcount;
+    }
+
+    catImage.addEventListener('click', incrementClickCount);
+
 </script>
 </html>
